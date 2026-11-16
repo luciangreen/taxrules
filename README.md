@@ -17,7 +17,7 @@ progressive income tax as rules, with explanations and checks. A table is a list
 
 1. The default table is valid, and tax never falls as income rises (checked dollar by dollar to 250,000).
 2. Earning one more dollar never costs more than 45 cents of tax.
-3. Tax is never more than 45% of income, and the bands of the explanation add up to the income taxed.
+3. Tax is never more than 45% of income, and the explanation's bands add up to the tax.
 4. For every valid small table, net income never falls as income rises.
 5. Marginal rate is the rate of the band the next dollar falls into.
 
