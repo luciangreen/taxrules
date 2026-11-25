@@ -5,11 +5,20 @@
 %?- tax(60000, T).            % T = 878800 cents, i.e. $8,788
 %?- explain(60000, E).        % E = [band(18200, 16, 26800, 428800), band(45000, 30, 15000, 450000)]
 %?- marginal(60000, R).       % R = 30
-:- module(taxrules, [bands/1, tax/2, tax/3, explain/2, explain/3, marginal/2, marginal/3, net/3, valid_table/1]).
+:- module(taxrules, [bands/1, bands/2, default_year/1, tax/2, tax/3, explain/2, explain/3, marginal/2, marginal/3, net/3, valid_table/1]).
 :- use_module(library(lists)).
 :- use_module(library(apply)).
 
-bands([band(0, 0), band(18200, 16), band(45000, 30), band(135000, 37), band(190000, 45)]).
+% Australian resident rates by income year (no Medicare levy or offsets). The rate between
+% 18,200 and 45,000 dollars is 16 per cent for 2024-25 and 2025-26, 15 per cent for 2026-27
+% and 14 per cent from 2027-28 (Treasury Laws Amendment (Cost of Living Tax Cuts) and the
+% 2025-26 Budget's further cuts). The default is the current income year, 2026-27.
+bands('2024-25', [band(0, 0), band(18200, 16), band(45000, 30), band(135000, 37), band(190000, 45)]).
+bands('2025-26', [band(0, 0), band(18200, 16), band(45000, 30), band(135000, 37), band(190000, 45)]).
+bands('2026-27', [band(0, 0), band(18200, 15), band(45000, 30), band(135000, 37), band(190000, 45)]).
+bands('2027-28', [band(0, 0), band(18200, 14), band(45000, 30), band(135000, 37), band(190000, 45)]).
+default_year('2026-27').
+bands(Tb) :- default_year(Y), bands(Y, Tb).
 
 tax(I, T) :- bands(Tb), tax(Tb, I, T).
 tax(Tb, I, T) :- explain(Tb, I, E), foldl([band(_, _, _, C), A0, A]>>( A is A0 + C ), E, 0, T).

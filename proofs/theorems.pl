@@ -25,3 +25,10 @@ theorem(any_valid_table_net_monotone) :- forall(small_table(Tb), forall(between(
 
 % 5. Marginal rate is the rate of the band the next dollar falls into.
 theorem(marginal_is_next_dollar) :- forall(( small_table(Tb), between(0, 29, I) ), ( marginal(Tb, I, R), tax(Tb, I, T), I1 is I + 1, tax(Tb, I1, T1), T1 - T =:= R )).
+
+% 6. Every income year's table is valid, and tax on 60,000 dollars is the published figure:
+%    8,788 dollars in 2024-25 and 2025-26, 8,520 in 2026-27 and 8,252 in 2027-28.
+theorem(year_tables) :- forall(bands(_, Tb), valid_table(Tb)),
+  forall(member(Y-T, ['2024-25'-878800, '2025-26'-878800, '2026-27'-852000, '2027-28'-825200]), ( bands(Y, Tb), tax(Tb, 60000, T) )),
+  default_year(D), bands(D, Td), bands(Tb0), Tb0 == Td.
+
